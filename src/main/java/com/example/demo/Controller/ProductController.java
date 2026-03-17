@@ -46,14 +46,14 @@ public class ProductController {
         return "products";
     }
 
-    @GetMapping("/create")
+    @GetMapping({"/create", "/add"})
     public String showCreateForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("formMode", "create");
         return "product-form";
     }
 
-    @PostMapping("/create")
+    @PostMapping({"/create", "/add"})
     public String createProduct(
         @Valid @ModelAttribute("product") Product product,
         BindingResult bindingResult,

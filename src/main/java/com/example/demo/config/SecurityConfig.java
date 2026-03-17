@@ -2,7 +2,6 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +19,18 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/uploads/**", "/error").permitAll()
+                .requestMatchers("/products/add", "/products/create", "/products/edit/**", "/products/delete/**")
+                .hasRole("ADMIN")
+                .requestMatchers("/order").hasRole("USER")
+                .requestMatchers("/products", "/products/**", "/", "/home").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
             )
-            .formLogin(Customizer.withDefaults())
-            .logout(Customizer.withDefaults());
+            .formLogin(form -> form
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .permitAll()
+            );
 
         return http.build();
     }
